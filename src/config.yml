@@ -1,0 +1,12 @@
+mysqlhost: 'localhost'
+mysqlport: '3306'
+mysqluser: 'System'
+mysqlpass: 'Updater'
+mysqldb: 'mistspad'
+
+
+
+
+
+
+ 

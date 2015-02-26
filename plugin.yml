@@ -1,0 +1,38 @@
+name: MistCore
+main: com.tollenaar.stephen.MistCore.MCore
+version: 1.7.9
+authors: [guitargun]
+description: what did I do wrong? wheres you prove well here it is
+commands:
+  ban:
+    description: ban someone
+  tempban:
+    description: tempban someone
+  note:
+    description: give someone a note of what they did without banning them.
+  lookup:
+    description: look up the notes of someone.
+  demote:
+    description: demote someone.
+  promote:
+    desciption: promote someone.
+  qban:
+    description: ban someone quiet.
+  qtempban:
+    description: tempban someone quiet.
+  qpromote:
+    description: promote someone quiet.
+  qdemote:
+    description: demote somone quiet.
+  tpnote:
+    desctiption: tp to a note.
+  summary:
+    description: get all the players notes in one summary
+  unban:
+    description: unban someone
+  qunban:
+    description: unban someone quiet
+  staff:
+    description: staff chat secrets only
+  countdown:
+    description: no
