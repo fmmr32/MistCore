@@ -7,12 +7,20 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.UUID;
 
+
+
+
+
+import net.minecraft.server.v1_8_R1.ChatSerializer;
+import net.minecraft.server.v1_8_R1.PacketPlayOutChat;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.v1_8_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import ru.tehkode.permissions.PermissionUser;
@@ -46,7 +54,7 @@ public class CmdLookup implements CommandExecutor {
 		String ent3 = ChatColor.RED +  "3. ";
 		String ent4 = ChatColor.RED +  "4. ";
 		String ent5 = ChatColor.RED +  "5. ";
-		String website = ChatColor.AQUA + "Want to see more of this player visit: ysir.eu/site/mistcore/" + args[0];
+		String website = ChatColor.AQUA + "Want to see more of this player visit: ysir.eu/mistcore/" + args[0];
 		String type = null;
 		PreparedStatement pst = null;
 		ResultSet rs = null;
@@ -54,18 +62,6 @@ public class CmdLookup implements CommandExecutor {
 		String sqllimit = "SELECT * FROM `Mist_Users` WHERE `username` LIKE ? ORDER BY `id` DESC LIMIT 5";
 		try{
 			
-			
-			pst = con.prepareStatement(sqllimit);
-			pst.setString(1, args[0]);
-			
-			rs = pst.executeQuery();
-	
-			while(rs.next()){
-				notes++;
-			} 
-			pst.close();
-			totalentries = totalentries + notes;
-			pst = con.prepareStatement(sqllimit);
 			Player victim = Bukkit.getPlayer(args[0]);
 			UUID playeruuid;
 			if(victim == null){
@@ -75,6 +71,19 @@ public class CmdLookup implements CommandExecutor {
 			}else{
 				playeruuid = victim.getUniqueId();
 			}
+			
+			pst = con.prepareStatement(sqllimit);
+			pst.setString(1, playeruuid.toString());
+			
+			rs = pst.executeQuery();
+	
+			while(rs.next()){
+				notes++;
+			} 
+			pst.close();
+			totalentries = totalentries + notes;
+			pst = con.prepareStatement(sqllimit);
+
 			pst.setString(1, playeruuid.toString());
 			rs = pst.executeQuery();
 			long currentnixtime = System.currentTimeMillis() / 1000L;
@@ -187,6 +196,11 @@ public class CmdLookup implements CommandExecutor {
 				sender.sendMessage(mess);
 			}
 		}
+
+		
+		
+		
+		
 		database.closecon();
 		return true;
 	}else{
