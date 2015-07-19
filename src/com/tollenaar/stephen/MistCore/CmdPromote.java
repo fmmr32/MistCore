@@ -1,6 +1,5 @@
 package com.tollenaar.stephen.MistCore;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,10 +17,9 @@ import ru.tehkode.permissions.PermissionUser;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 public class CmdPromote implements CommandExecutor {
-	MCore plugin;
-	DbStuff database;
-	Connection con;
-	Message message;
+	private MCore plugin;
+	private DbStuff database;
+	private Message message;
 	@SuppressWarnings("deprecation")
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args){
 		PermissionUser moderator = null;
@@ -71,7 +69,7 @@ public class CmdPromote implements CommandExecutor {
 		ResultSet rs = null;
 		String sqlsel = "SELECT * FROM `Mist_Users` WHERE `username` LIKE ? AND (`type` = 1 OR `type` = 2 OR `type` = 3) ORDER BY `id` DESC LIMIT 1";
 		try{
-			pst = con.prepareStatement(sqlsel);
+			pst = database.GetCon().prepareStatement(sqlsel);
 			Player victim = Bukkit.getPlayer(playername);
 			UUID playeruuid;
 			if(victim == null){
@@ -135,7 +133,6 @@ public class CmdPromote implements CommandExecutor {
 	  public CmdPromote(MCore instance){
 		  this.plugin = instance;
 		  this.database = instance.database;
-		  this.con = instance.con;
 		  this.message = instance.message;
 	  }
 }

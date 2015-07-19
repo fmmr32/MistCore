@@ -1,6 +1,5 @@
 package com.tollenaar.stephen.MistCore;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -22,15 +21,14 @@ import ru.tehkode.permissions.PermissionUser;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 public class CmdSummary implements CommandExecutor {
-	MCore plugin;
-	DbStuff database;
-	Connection con;
+private	MCore plugin;
+private	DbStuff database;
 
 	public boolean onCommand(CommandSender sender, Command cmd,
 			String commandLabel, String[] args) {
 		PermissionUser moderator = null;
-		if (con != null) {
-			if (sender instanceof Player) {
+		database.checkcon();
+		if (sender instanceof Player) {
 				moderator = PermissionsEx.getUser((Player) sender);
 			} else {
 				sender.sendMessage(ChatColor.RED + "[" + ChatColor.GOLD
@@ -65,7 +63,7 @@ public class CmdSummary implements CommandExecutor {
 			ResultSet rs = null;
 			String sqlselect = "SELECT * FROM `Mist_Users` WHERE `username` LIKE ? AND `type` = ?;";
 			try {
-				pst = con.prepareStatement(sqlselect);
+				pst = database.GetCon().prepareStatement(sqlselect);
 				Player victim = Bukkit.getPlayer(args[0]);
 				UUID playeruuid;
 				if (victim == null) {
@@ -183,16 +181,10 @@ public class CmdSummary implements CommandExecutor {
 				}
 			}
 			return true;
-		} else {
-			sender.sendMessage(ChatColor.GOLD
-					+ "FUNCTION DISABLED PLUGIN IS IN OFFLINE MODE.");
-			return true;
-		}
 	}
 
 	public CmdSummary(MCore instance) {
 		this.plugin = instance;
 		this.database = instance.database;
-		this.con = instance.con;
 	}
 }

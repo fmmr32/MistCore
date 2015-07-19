@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -15,14 +14,14 @@ import org.bukkit.entity.Player;
 import code.husky.mysql.MySQL;
 
 public class DbStuff {
-	Connection con = null;
-	String mysqlpass;
-	String mysqluser;
-	String mysqldb;
-	String mysqlpot;
-	String mysqlhost;
+	private Connection con = null;
+	private String mysqlpass;
+	private String mysqluser;
+	private String mysqldb;
+	private String mysqlpot;
+	private String mysqlhost;
 	private MCore plugin;
-	MySQL MySQl;
+	private MySQL MySQl;
 	private int scheduler;
 	public FileWriters fw;
 	private int timer = 0;
@@ -39,19 +38,10 @@ public class DbStuff {
 									.prepareStatement("SELECT id FROM `Mist_Users` LIMIT 1;");
 							pst.execute();
 						} catch (SQLException ex) {
-							System.out.println("going special route");
 							opencon();
-							con = null;
-							MySQl = null;
-							specialclock();
-							if (Bukkit.getPluginManager()
-									.getPlugin("MistsOfYsir").isEnabled()) {
-								Bukkit.getPluginManager().disablePlugin(
-										Bukkit.getPluginManager().getPlugin(
-												"MistsOfYsir"));
-							}
-							System.out.println(ex.getMessage());
-
+							intvar();
+							OpenConnect();
+							closecon();
 						}
 					}
 				}, 0L, timeout * 20L);
@@ -282,7 +272,28 @@ public class DbStuff {
 			con = connect;
 		}
 	}
-
+	
+	public Connection GetCon(){
+		return con;
+	}
+	public void checkcon(){
+		try {
+			if(con.isClosed()){
+				opencon();
+				intvar();
+				OpenConnect();
+			}
+		} catch (SQLException | NullPointerException e) {
+			opencon();
+			intvar();
+			OpenConnect();
+		}
+	}
+	
+	public void OpenConnect(){
+		setcon(MySQl.openConnection());
+	}
+	
 	public void specialclock() {
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
 			public void run() {

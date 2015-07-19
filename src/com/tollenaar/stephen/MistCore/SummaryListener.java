@@ -1,6 +1,5 @@
 package com.tollenaar.stephen.MistCore;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,9 +19,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class SummaryListener implements Listener {
-	MCore plugin;
-	DbStuff database;
-	Connection con;
+private	MCore plugin;
+private	DbStuff database;
 	
 	@EventHandler
 	public void onInventoryClick(InventoryClickEvent event){
@@ -83,7 +81,7 @@ public class SummaryListener implements Listener {
 			}
 			Material[] blocktype = new Material[]{Material.GLOWSTONE, Material.BEDROCK, Material.OBSIDIAN, Material.NETHERRACK, Material.SOUL_SAND, Material.QUARTZ_BLOCK};
 			try{
-				pst = con.prepareStatement(sqlselect);
+				pst = database.GetCon().prepareStatement(sqlselect);
 				Player victim = Bukkit.getPlayer(playername);
 				UUID playeruuid;
 				if(victim == null){
@@ -155,6 +153,5 @@ public class SummaryListener implements Listener {
 	public SummaryListener(MCore instance){
 		this.plugin = instance;
 		this.database = instance.database;
-		this.con = instance.con;
 	}
 }

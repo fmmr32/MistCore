@@ -1,6 +1,5 @@
 package com.tollenaar.stephen.MistCore;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,11 +23,10 @@ import ru.tehkode.permissions.PermissionUser;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 public class CmdLookup implements CommandExecutor {
-	MCore plugin;
-	DbStuff database;
-	Connection con;
+	private MCore plugin;
+	private DbStuff database;
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args){
-		if(con != null){
+		database.checkcon();
 		PermissionUser moderator = null;
 				if(sender instanceof Player){
 					moderator = PermissionsEx.getUser((Player) sender);
@@ -41,7 +39,6 @@ public class CmdLookup implements CommandExecutor {
 			sender.sendMessage(ChatColor.RED + "[" + ChatColor.GOLD + "MistCore" + ChatColor.RED + "]" + ChatColor.AQUA + " This command wasn't used correctly. Use it as /lookup <playername>");
 			return true;
 		}
-	database.opencon();
 		HashMap<Integer, Integer> lookupmap = new HashMap<Integer, Integer>();
 		String startmessage = ChatColor.GOLD + "========" + ChatColor.RED + "[" + ChatColor.GOLD + "MistCore" + ChatColor.RED + "]" + ChatColor.GOLD + "========";
 		String totalentries = ChatColor.GOLD + "Total notes found: ";
@@ -69,7 +66,7 @@ public class CmdLookup implements CommandExecutor {
 				playeruuid = victim.getUniqueId();
 			}
 			
-			pst = con.prepareStatement(sqllimit);
+			pst = database.GetCon().prepareStatement(sqllimit);
 			pst.setString(1, playeruuid.toString());
 			
 			rs = pst.executeQuery();
@@ -79,7 +76,7 @@ public class CmdLookup implements CommandExecutor {
 			} 
 			pst.close();
 			totalentries = totalentries + notes;
-			pst = con.prepareStatement(sqllimit);
+			pst = database.GetCon().prepareStatement(sqllimit);
 
 			pst.setString(1, playeruuid.toString());
 			rs = pst.executeQuery();
@@ -200,10 +197,6 @@ public class CmdLookup implements CommandExecutor {
 		
 		database.closecon();
 		return true;
-	}else{
-		sender.sendMessage(ChatColor.GOLD + "FUNCTION DISABLED. PLUGIN IS IN OFFLINE MODE.");
-		return true;
-	}
 	}
 public String calcTimeShort(double secondsleft)
 {
@@ -232,6 +225,5 @@ public String calcTimeShort(double secondsleft)
 	public CmdLookup(MCore instance){
 		this.plugin = instance;
 		this.database = instance.database;
-		this.con = database.con;
 	}
 }

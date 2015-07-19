@@ -1,6 +1,5 @@
 package com.tollenaar.stephen.MistCore;
 
-import java.sql.Connection;
 import java.util.HashMap;
 
 import org.bukkit.Bukkit;
@@ -10,17 +9,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.fusesource.jansi.Ansi;
 
 
-
-
-import code.husky.mysql.MySQL;
-
 public class MCore extends JavaPlugin {
-	Connection con = null;
-	MCore plugin;
-	DbStuff database;
-	Message message;
-	Adminchat ac;
-	Note note;
+	protected MCore plugin;
+	protected DbStuff database;
+	protected Message message;
+	protected Adminchat ac;
+	protected Note note;
 	public HashMap<String, HashMap<Integer, Integer>> lookuplist = new HashMap<String, HashMap<Integer, Integer>>();
 	public HashMap<String, String> inventorystore = new HashMap<String, String>();
 
@@ -36,11 +30,10 @@ public class MCore extends JavaPlugin {
 		ac = new Adminchat(this);
 		note = new Note(this);
 		database.intvar();
-		MySQL MySQl = database.MySQl;
 		int poging = 0;
-		while (con == null) {
-			con = MySQl.openConnection();
-			if (con == null) {
+		while (database.GetCon() == null) {
+			database.OpenConnect();
+			if (database.GetCon() == null) {
 				poging++;
 				getLogger()
 						.info("Database connection lost. Reconection will be started");
@@ -55,42 +48,42 @@ public class MCore extends JavaPlugin {
 			}
 
 		}
-			database.setcon(con);
-			if(con != null){
-				
+		if (database.GetCon() != null) {
+
 			getLogger().info("Databse connection has succeed");
 			database.TableCreate();
 			database.closecon();
 			database.fw.loadall();
-			
-			for(Player player : Bukkit.getOnlinePlayers()){
-				database.updateonlinestatus(player.getUniqueId().toString(), true);
+
+			for (Player player : Bukkit.getOnlinePlayers()) {
+				database.updateonlinestatus(player.getUniqueId().toString(),
+						true);
 			}
-			
-			}else{
-				database.specialclock();
-			}
-			getCommand("ban").setExecutor(new CmdBans(this));
-			getCommand("tempban").setExecutor(new CmdBans(this));
-			getCommand("qban").setExecutor(new CmdBans(this));
-			getCommand("qtempban").setExecutor(new CmdBans(this));
-			getCommand("note").setExecutor(note);
-			getCommand("lookup").setExecutor(new CmdLookup(this));
-			getCommand("demote").setExecutor(new CmdDemote(this));
-			getCommand("promote").setExecutor(new CmdPromote(this));
-			getCommand("qdemote").setExecutor(new CmdDemote(this));
-			getCommand("qpromote").setExecutor(new CmdPromote(this));
-			getCommand("tpnote").setExecutor(new TpNote(this));
-			getCommand("summary").setExecutor(new CmdSummary(this));
-			getCommand("unban").setExecutor(new CmdUnban(this));
-			getCommand("qunban").setExecutor(new CmdUnban(this));
-			getCommand("staff").setExecutor(ac);
-			getCommand("countdown").setExecutor(new CmdCount(this));
-			getServer().getPluginManager().registerEvents(new JoinBlock(this),
-					this);
-			getServer().getPluginManager().registerEvents(
-					new SummaryListener(this), this);
-			getServer().getPluginManager().registerEvents(ac, this);
+
+		} else {
+			database.specialclock();
+		}
+		getCommand("ban").setExecutor(new CmdBans(this));
+		getCommand("tempban").setExecutor(new CmdBans(this));
+		getCommand("qban").setExecutor(new CmdBans(this));
+		getCommand("qtempban").setExecutor(new CmdBans(this));
+		getCommand("note").setExecutor(note);
+		getCommand("lookup").setExecutor(new CmdLookup(this));
+		getCommand("demote").setExecutor(new CmdDemote(this));
+		getCommand("promote").setExecutor(new CmdPromote(this));
+		getCommand("qdemote").setExecutor(new CmdDemote(this));
+		getCommand("qpromote").setExecutor(new CmdPromote(this));
+		getCommand("tpnote").setExecutor(new TpNote(this));
+		getCommand("summary").setExecutor(new CmdSummary(this));
+		getCommand("unban").setExecutor(new CmdUnban(this));
+		getCommand("qunban").setExecutor(new CmdUnban(this));
+		getCommand("staff").setExecutor(ac);
+		getCommand("countdown").setExecutor(new CmdCount(this));
+		getServer().getPluginManager()
+				.registerEvents(new JoinBlock(this), this);
+		getServer().getPluginManager().registerEvents(
+				new SummaryListener(this), this);
+		getServer().getPluginManager().registerEvents(ac, this);
 	}
 
 	public void onDisable() {

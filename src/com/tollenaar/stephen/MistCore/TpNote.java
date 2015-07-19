@@ -1,6 +1,5 @@
 package com.tollenaar.stephen.MistCore;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,9 +18,8 @@ import ru.tehkode.permissions.PermissionUser;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 public class TpNote implements CommandExecutor {
-	MCore plugin;
-	DbStuff database;
-	Connection con;
+private	MCore plugin;
+private	DbStuff database;
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args){
 		PermissionUser moderator = null;
 		int x;
@@ -64,7 +62,7 @@ public class TpNote implements CommandExecutor {
 		ResultSet rs = null;
 		String sqlget = "SELECT * FROM `Mist_Users` WHERE `id` = ?;";
 		try{
-			pst = con.prepareStatement(sqlget);
+			pst = database.GetCon().prepareStatement(sqlget);
 			pst.setInt(1, lookupdata.get(lookupid));
 			rs = pst.executeQuery();
 			if(rs.last()){
@@ -118,6 +116,5 @@ public class TpNote implements CommandExecutor {
 	public TpNote(MCore instance){
 		this.plugin = instance;
 		this.database = instance.database;
-		this.con = instance.con;
 	}
 }

@@ -1,6 +1,5 @@
 package com.tollenaar.stephen.MistCore;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,14 +16,12 @@ import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 public class JoinBlock implements Listener {
-	MCore plugin;
-	DbStuff database;
-	Connection con;
+private 	MCore plugin;
+private	DbStuff database;
 
 	public JoinBlock(MCore instance) {
 		this.plugin = instance;
 		this.database = instance.database;
-		this.con = instance.con;
 	}
 	
 	
@@ -42,7 +39,7 @@ public class JoinBlock implements Listener {
 		ResultSet result = null;
 		boolean comeson  =true;
 		try {
-			pst = con.prepareStatement(sql);
+			pst = database.GetCon().prepareStatement(sql);
 			Player victim = Bukkit.getPlayer(player.getName());
 			UUID playeruuid;
 			if (victim == null) {
