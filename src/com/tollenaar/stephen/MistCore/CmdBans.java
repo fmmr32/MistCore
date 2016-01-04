@@ -81,7 +81,7 @@ public class CmdBans implements CommandExecutor {
 			if(player != null){
 				player.kickPlayer(ChatColor.RED + "[" + ChatColor.GOLD + "MistCore" + ChatColor.RED + "]" + ChatColor.AQUA + " You're banned from this server. Check the website for more information.");
 			}
-			user.setGroups(new String[] {"Bandit"});
+			user.setGroups(new String[] {plugin.getDemoteRank()});
 			}
 			if(cmd.getName().equalsIgnoreCase("ban")){
 				message.sendmessage(false, playername, "permban", moderatorname, "", reason.replaceAll("_", " "));
@@ -120,7 +120,7 @@ public class CmdBans implements CommandExecutor {
 				String tijd = calcTime(seconds - System.currentTimeMillis() / 1000L);
 				player.kickPlayer(ChatColor.RED + "[" + ChatColor.GOLD + "MistCore" + ChatColor.RED + "]" + ChatColor.AQUA + " You're tempory banned from this server. You are " + tijd + " banned");		
 				}
-			user.setGroups(new String[] {"Bandit"});
+			user.setGroups(new String[] {plugin.getDemoteRank()});
 			String tijd = calcTime(seconds - System.currentTimeMillis() / 1000L);
 			if(cmd.getName().equalsIgnoreCase("tempban")){
 				message.sendmessage(false, playername, "tempban", moderatorname, tijd, reason.replaceAll("_", " "));

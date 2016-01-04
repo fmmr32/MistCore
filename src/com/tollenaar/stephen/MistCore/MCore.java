@@ -89,5 +89,9 @@ public class MCore extends JavaPlugin {
 	public void onDisable() {
 		database.onshutdown();
 	}
+	
+	protected String getDemoteRank(){
+		return getConfig().getString("demoterank");
+	}
 
 }

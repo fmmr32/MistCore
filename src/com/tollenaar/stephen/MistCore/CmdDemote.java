@@ -64,7 +64,7 @@ public class CmdDemote implements CommandExecutor{
 			groepen.append(t + " ");
 		}
 		database.saveto(playername, moderatorname, reason, 3, x, y, z, 0, System.currentTimeMillis()/1000L, world, groepen.toString());
-		user.setGroups(new String[] {"Bandit"});
+		user.setGroups(new String[] {plugin.getDemoteRank()});
 		if(cmd.getName().equalsIgnoreCase("demote")){
 			message.sendmessage(false, playername, "demote", moderatorname, "", reason.replaceAll("_", " "));
 		}else{
