@@ -2,19 +2,17 @@ package mcore.tollenaar.stephen.MistCore;
 
 import java.util.HashMap;
 
-
-
-
-
+import mcore.tollenaar.stephen.Admin.CommandsAdmin;
+import mcore.tollenaar.stephen.Admin.PlayerLeave;
 import mcore.tollenaar.stephen.Admin.Storage;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.fusesource.jansi.Ansi;
-
 
 public class MCore extends JavaPlugin {
 	protected MCore plugin;
@@ -24,18 +22,22 @@ public class MCore extends JavaPlugin {
 	protected Note note;
 	public HashMap<String, HashMap<Integer, Integer>> lookuplist = new HashMap<String, HashMap<Integer, Integer>>();
 	public HashMap<String, String> inventorystore = new HashMap<String, String>();
-	private String announcer = ChatColor.GOLD + "[" + ChatColor.RED + "MAdmin" + ChatColor.GOLD + "] " + ChatColor.RED;
+	private String announcer = ChatColor.GOLD + "[" + ChatColor.RED + "MistCore"
+			+ ChatColor.GOLD + "] " + ChatColor.RED;
 	public Storage storage;
 	public FileWriters fw;
-	
-	public void onEnable() {
-		final FileConfiguration config = this.getConfig();
+	private FileConfiguration config;
 
+	public void onEnable() {
+
+		config = this.getConfig();
 		config.options().copyDefaults(true);
+		config.options().header("If a command has only 1 '/' don't type it. If it has 2 '/' only type 1. ");
 		saveConfig();
-		getConfig().options().copyDefaults(true);
 		plugin = this;
+		storage = new Storage(this);
 		fw = new FileWriters(this);
+		
 		database = new DbStuff(this);
 		message = new Message(this);
 		ac = new Adminchat(this);
@@ -95,21 +97,27 @@ public class MCore extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(
 				new SummaryListener(this), this);
 		getServer().getPluginManager().registerEvents(ac, this);
+		getCommand("admin").setExecutor(new CommandsAdmin(this));
+
+		PluginManager pm = getServer().getPluginManager();
+		pm.registerEvents(new PlayerLeave(this), this);
+
+		for (Player on : Bukkit.getOnlinePlayers()) {
+			fw.loadPlayerData(on);
+		}
 	}
 
 	public void onDisable() {
 		database.onshutdown();
-	
+
 	}
-	
-	protected String getDemoteRank(){
+
+	protected String getDemoteRank() {
 		return getConfig().getString("demoterank");
 	}
-	
-	
-	public String getAnnouncer(){
+
+	public String getAnnouncer() {
 		return announcer;
 	}
-	
 
 }
