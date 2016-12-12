@@ -48,7 +48,6 @@ public class CmdLookup implements CommandExecutor {
 		String ent3 = ChatColor.RED +  "3. ";
 		String ent4 = ChatColor.RED +  "4. ";
 		String ent5 = ChatColor.RED +  "5. ";
-		String website = ChatColor.AQUA + "Want to see more of this player visit: ysir.eu/mistcore/" + args[0];
 		String type = null;
 		PreparedStatement pst = null;
 		ResultSet rs = null;
@@ -180,7 +179,7 @@ public class CmdLookup implements CommandExecutor {
 			this.plugin.lookuplist.remove(sender.getName());
 		}
 		this.plugin.lookuplist.put(sender.getName(), lookupmap);
-		String []returnmess = {startmessage, totalentries, latest, ent1.replace("_", " "), ent2.replace("_", " "), ent3.replace("_", " "), ent4.replace("_", " "), ent5.replace("_", " "), website};
+		String []returnmess = {startmessage, totalentries, latest, ent1.replace("_", " "), ent2.replace("_", " "), ent3.replace("_", " "), ent4.replace("_", " "), ent5.replace("_", "")};
 		if(notes == 0){
 			sender.sendMessage(startmessage);
 			sender.sendMessage(ChatColor.GOLD + "No notes found of this player");
