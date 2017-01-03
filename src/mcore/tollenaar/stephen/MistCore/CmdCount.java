@@ -22,7 +22,7 @@ public class CmdCount implements CommandExecutor{
 		if(sender instanceof Player){
 			Player player = (Player) sender;
 			PermissionUser ser = PermissionsEx.getUser(player);
-			if(!ser.has("Ysir.restart")){
+			if(!ser.has("Mist.restart")){
 				pass = false;
 			}
 		}

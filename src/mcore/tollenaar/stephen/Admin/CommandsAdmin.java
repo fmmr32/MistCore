@@ -27,7 +27,7 @@ public class CommandsAdmin implements CommandExecutor{
 		if(sender instanceof Player){
 			Player player = (Player) sender;
 		PermissionUser user = PermissionsEx.getUser(player);
-		if(user.has("MAdmin.adminmode")){
+		if(user.has("MistCore.adminmode")){
 			if(storage.getActive(player.getUniqueId()) == null){
 				storage.addActive(player);
 			}else{
